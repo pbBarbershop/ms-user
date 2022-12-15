@@ -18,9 +18,9 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
-    @ExceptionHandler(DataIntegratyValidationException.class)
-    public ResponseEntity<StandardError> dataIntegratyViolationException
-            (DataIntegratyValidationException ex, HttpServletRequest request) {
+    @ExceptionHandler(DataIntegrityValidationException.class)
+    public ResponseEntity<StandardError> dataIntegrityViolationException
+            (DataIntegrityValidationException ex, HttpServletRequest request) {
         StandardError error = new StandardError
                 (LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), ex.getMessage(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);

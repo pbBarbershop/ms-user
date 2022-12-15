@@ -17,6 +17,7 @@ public class UserDTO {
     private String phone;
     private String document;
 
-
-
+    public long setId() {
+        return 0;
+    }
 }
