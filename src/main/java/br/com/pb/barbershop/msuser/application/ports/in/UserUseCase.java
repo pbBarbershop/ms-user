@@ -8,7 +8,6 @@ import br.com.pb.barbershop.msuser.framework.exception.DataIntegrityValidationEx
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -36,7 +35,7 @@ public class UserUseCase implements UserService {
 
     private void findByEmail(UserDTO obj) {
         Optional<User> user = repository.findByEmail(obj.getEmail());
-        if (user.isPresent() && !Objects.equals(user.get().getId(), obj.getId)) {
+        if (user.isPresent() && !user.get().getId().equals(obj.getId())) {
             throw new DataIntegrityValidationException("Email already registered in the system");
         }
     }

@@ -5,19 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Setter @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
 
-    public Long getId;
+    private Long id;
     private String name;
     private String email;
     private String phone;
     private String document;
 
-    public long setId() {
-        return 0;
-    }
+
+
 }

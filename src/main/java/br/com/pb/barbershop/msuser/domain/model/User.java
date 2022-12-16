@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 
 
 @Data
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class User  {
 
     @Id

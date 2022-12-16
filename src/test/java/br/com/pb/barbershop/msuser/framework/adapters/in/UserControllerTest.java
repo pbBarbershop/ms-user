@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class UserControllerTest {
 
-    private static final Long ID         = Long.valueOf(1);
+    private static final Long ID         = 1L;
     private static final String NAME     = "michel";
     private static final String EMAIL    = "michel@mail.com";
     private static final String PHONE    = "123";
@@ -58,7 +58,7 @@ class UserControllerTest {
         when(useCase.update(userDTO)).thenReturn(user);
         when(mapper.map(any(), any())).thenReturn(userDTO);
 
-        ResponseEntity<UserDTO> response = controller.update((long) ID, userDTO);
+        ResponseEntity<UserDTO> response = controller.update(ID, userDTO);
 
         assertNotNull(response);
         assertNotNull(response.getBody());
@@ -66,7 +66,7 @@ class UserControllerTest {
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(UserDTO.class, response.getBody().getClass());
 
-        assertEquals(ID, response.getBody().setId());
+        assertEquals(ID, response.getBody().getId());
         assertEquals(NAME, response.getBody().getName());
         assertEquals(EMAIL, response.getBody().getEmail());
         assertEquals(PHONE, response.getBody().getPhone());

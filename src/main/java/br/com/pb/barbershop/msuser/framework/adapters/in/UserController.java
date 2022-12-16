@@ -13,6 +13,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/user")
 public class UserController {
 
+    private static final String ID = "/{id}";
+
     private final ModelMapper mapper;
     private final UserService service;
 
@@ -23,9 +25,9 @@ public class UserController {
 
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = ID)
     public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO obj) {
-        obj.setId();
+        obj.setId(id);
         return ResponseEntity.ok().body(mapper.map(service.update(obj), UserDTO.class));
     }
 
