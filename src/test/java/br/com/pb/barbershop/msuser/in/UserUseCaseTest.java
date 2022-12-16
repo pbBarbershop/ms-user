@@ -4,7 +4,7 @@ import br.com.pb.barbershop.msuser.application.ports.in.UserUseCase;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import br.com.pb.barbershop.msuser.domain.model.User;
 import br.com.pb.barbershop.msuser.framework.exception.DataIntegrityValidationException;
-import br.com.pr.barbershop.msuser.application.ports.out.UserRepository;
+import br.com.pb.barbershop.msuser.application.ports.out.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

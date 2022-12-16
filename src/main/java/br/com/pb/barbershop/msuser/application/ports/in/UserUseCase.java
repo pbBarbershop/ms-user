@@ -22,6 +22,11 @@ public class UserUseCase implements UserService {
         this.repository = repository;
     }
 
+    @Override
+    public User create(UserDTO obj) {
+        findByEmail(obj);
+        return repository.save(mapper.map(obj, User.class));
+    }
 
     @Override
     public User update(UserDTO obj) {
@@ -36,5 +41,7 @@ public class UserUseCase implements UserService {
         }
     }
 }
+
+
 
 
