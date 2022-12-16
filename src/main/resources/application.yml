@@ -1,10 +1,26 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
 spring:
+  application:
+    name: user
+
+  # database
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ms_user
+    url: jdbc:mysql://localhost:3306/user?createDatabaseIfNotExist=true
     username: root
-    password: michelflava
+    password: 99168844Jo#
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    hibernate.ddl-auto: update
-    generate-ddl: true
     show-sql: true
+    hibernate:
+      ddl-auto: update
+
+# springdoc - swagger
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
