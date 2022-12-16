@@ -18,6 +18,13 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(IdNotFoundException.class)
+    public ResponseEntity<StandardError> idNotFound(IdNotFoundException ex, HttpServletRequest request) {
+        StandardError error = new StandardError
+                (LocalDateTime.now(), HttpStatus.NOT_FOUND.value(), ex.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(DataIntegratyValidationException.class)
     public ResponseEntity<StandardError> dataIntegratyViolationException
             (DataIntegratyValidationException ex, HttpServletRequest request) {

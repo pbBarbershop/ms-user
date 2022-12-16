@@ -24,5 +24,4 @@ public class UserUseCase implements UserService {
         checkIfIdExists(id);
         userRepository.deleteById(id);
     }
-
 }
