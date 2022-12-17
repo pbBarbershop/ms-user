@@ -2,6 +2,7 @@ package br.com.pb.barbershop.msuser.framework.adapters.in;
 
 import br.com.pb.barbershop.msuser.application.service.UserService;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +20,14 @@ public class UserController {
     private final UserService service;
 
     @PostMapping
-    public ResponseEntity<UserDTO> create(@RequestBody UserDTO obj) {
+    public ResponseEntity<UserDTO> create(@RequestBody @Valid UserDTO obj) {
         return ResponseEntity.created(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}").buildAndExpand(service.create(obj).getId()).toUri()).build();
 
     }
 
     @PutMapping(value = ID)
-    public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO obj) {
+    public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody @Valid UserDTO obj) {
         obj.setId(id);
         return ResponseEntity.ok().body(mapper.map(service.update(obj), UserDTO.class));
     }

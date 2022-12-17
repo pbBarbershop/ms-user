@@ -36,7 +36,7 @@ public class UserUseCase implements UserService {
     private void findByEmail(UserDTO obj) {
         Optional<User> user = repository.findByEmail(obj.getEmail());
         if (user.isPresent() && !user.get().getId().equals(obj.getId())) {
-            throw new DataIntegrityValidationException("Email already registered in the system");
+            throw new DataIntegrityValidationException("Email ja registrado no sistema");
         }
     }
 }

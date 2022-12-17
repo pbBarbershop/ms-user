@@ -6,6 +6,7 @@ import br.com.pb.barbershop.msuser.domain.model.User;
 public interface UserService {
 
     User create(UserDTO obj);
+
     User update(UserDTO obj);
 
 
