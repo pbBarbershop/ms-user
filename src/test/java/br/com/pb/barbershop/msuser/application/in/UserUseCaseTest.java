@@ -2,15 +2,24 @@ package br.com.pb.barbershop.msuser.application.in;
 
 import br.com.pb.barbershop.msuser.application.ports.in.UserUseCase;
 import br.com.pb.barbershop.msuser.application.ports.out.UserRepository;
+import br.com.pb.barbershop.msuser.domain.dto.PageableDTO;
+import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import br.com.pb.barbershop.msuser.domain.model.User;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 public class UserUseCaseTest {
@@ -21,23 +30,32 @@ public class UserUseCaseTest {
     @Mock
     private UserRepository userRepository;
 
+    @Spy
+    ModelMapper mapper;
+
     @Test
-    public void shouldReturnAllUsers() {
-
+    void shouldFindAllUsers() {
         var user = new User();
-        List<User> list = new ArrayList<>();
+        Page<User> page = new PageImpl<>(List.of(user));
+        PageableDTO expectedPageableParameters = getStateResponseParameters();
 
-        user.setId(1l);
-        user.setName("João");
-        user.setEmail("Joao@gmail.com");
-        user.setPhone("894223824");
-        user.setDocument("3423526");
-        list.add(user);
+        Mockito.when(userRepository.findAll((Pageable) any())).thenReturn(page);
 
-        Mockito.when(userRepository.findAll()).thenReturn(list);
+        PageableDTO pageableParameters = userCase.findAll(null, any(Pageable.class));
 
-        List<User> AllUsersList = userCase.findAll();
+//      assertEquals(expectedPageableParameters, pageableParameters);
+        assertEquals(expectedPageableParameters.getNumberOfElements(), pageableParameters.getNumberOfElements());
+        assertEquals(expectedPageableParameters.getTotalElements(), pageableParameters.getTotalElements());
+        assertEquals(expectedPageableParameters.getTotalPages(), pageableParameters.getTotalPages());
+        assertEquals(expectedPageableParameters.getUsersDTO().get(0).getId(), pageableParameters.getUsersDTO().get(0).getId());
+    }
 
-        assertEquals(list, AllUsersList);
+    private PageableDTO getStateResponseParameters() {
+        return PageableDTO.builder()
+                .numberOfElements(1)
+                .totalElements(1L)
+                .totalPages(1)
+                .usersDTO(List.of(new UserDTO()))
+                .build();
     }
 }
