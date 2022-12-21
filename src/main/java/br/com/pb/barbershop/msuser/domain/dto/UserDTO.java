@@ -14,17 +14,13 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-
     private Long id;
-
     @NotBlank
     @Pattern(regexp = "^([a-zA-ZãÃéÉíÍóÓêÊôÔáÁ\s])+$", message =
             "Nome deve conter apenas letras e não deve ser em branco.")
     private String name;
-
     @Email
     private String email;
-
     @NotBlank
     @Length(min = 11, max = 11, message =
             "Deve conter ddd + número (11 caracteres ex. 11111111111).")
@@ -33,5 +29,6 @@ public class UserDTO {
     private String phone;
 
     private String document;
-
 }
+
+

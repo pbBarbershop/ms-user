@@ -9,6 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 import org.springframework.http.HttpStatus;
+import br.com.pb.barbershop.msuser.domain.dto.PageableDTO;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,9 +38,14 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteUserId (@PathVariable Long id){
+    public ResponseEntity deleteUserId(@PathVariable Long id) {
         service.deleteUserId(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping
+    public PageableDTO findAll(@RequestParam(required = false) String name, Pageable pageable) {
+        return this.service.findAll(name, pageable);
     }
 }
 

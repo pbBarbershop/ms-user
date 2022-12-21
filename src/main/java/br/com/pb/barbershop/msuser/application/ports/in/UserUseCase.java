@@ -1,5 +1,4 @@
 package br.com.pb.barbershop.msuser.application.ports.in;
-
 import br.com.pb.barbershop.msuser.application.ports.out.UserRepository;
 import br.com.pb.barbershop.msuser.application.service.UserService;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
@@ -9,19 +8,20 @@ import jakarta.persistence.NoResultException;
 import org.modelmapper.ModelMapper;
 import br.com.pb.barbershop.msuser.framework.exception.IdNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
+import br.com.pb.barbershop.msuser.domain.dto.PageableDTO;
+import lombok.AllArgsConstructor;
+import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import java.util.List;
+
 
 @Service
+@AllArgsConstructor
 public class UserUseCase implements UserService {
-
     private final ModelMapper mapper;
     private final UserRepository repository;
-
-    public UserUseCase(ModelMapper mapper, UserRepository repository) {
-        this.mapper = mapper;
-        this.repository = repository;
-    }
 
     @Override
     public User create(UserDTO obj) {
@@ -46,10 +46,20 @@ public class UserUseCase implements UserService {
     private void checkIfIdExists(Long id){
         repository.findById(id).orElseThrow(() -> new IdNotFoundException(id));
     }
-
-    public void deleteUserId(Long id){
+    @Override
+    public void deleteUserId(Long id) {
         checkIfIdExists(id);
         repository.deleteById(id);
+    }
+    @Override
+    public PageableDTO findAll(String name, Pageable pageable) {
+        Page<User> page = name==null?
+                repository.findAll(pageable):repository.findByName(name, pageable);
+        List<User> users = page.getContent();
+        List<UserDTO> usersDTO = mapper.map(users, new TypeToken<List<UserDTO>>(){}.getType());
+        return PageableDTO.builder().numberOfElements(page.getNumberOfElements())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages()).usersDTO(usersDTO).build();
     }
 }
 
