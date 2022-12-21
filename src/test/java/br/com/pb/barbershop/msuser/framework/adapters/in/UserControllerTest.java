@@ -2,6 +2,7 @@ package br.com.pb.barbershop.msuser.framework.adapters.in;
 
 import br.com.pb.barbershop.msuser.application.ports.in.UserUseCase;
 import br.com.pb.barbershop.msuser.domain.dto.PageableDTO;
+import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import br.com.pb.barbershop.msuser.domain.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,6 +36,7 @@ public class UserControllerTest {
     private UserUseCase userCase;
 
     private static final String URL = "/user";
+    private static final String URL_ID = URL+"/1";
 
     @Test
     void shouldListAllTheUsers() throws Exception {
@@ -49,5 +53,14 @@ public class UserControllerTest {
         MockHttpServletResponse response = result.getResponse();
 
         assertEquals(HttpStatus.OK.value(), response.getStatus());
+    }
+
+    @Test
+    void findByIdTest() throws Exception {
+        UserDTO userDTO = new UserDTO();
+        when(userCase.findById(any())).thenReturn(userDTO);
+        mockMvc.perform(MockMvcRequestBuilders.get(URL_ID)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200));
     }
 }

@@ -1,4 +1,5 @@
 package br.com.pb.barbershop.msuser.application.ports.in;
+
 import br.com.pb.barbershop.msuser.application.ports.out.UserRepository;
 import br.com.pb.barbershop.msuser.application.service.UserService;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
@@ -7,6 +8,7 @@ import br.com.pb.barbershop.msuser.framework.exception.DataIntegrityValidationEx
 import jakarta.persistence.NoResultException;
 import org.modelmapper.ModelMapper;
 import br.com.pb.barbershop.msuser.framework.exception.IdNotFoundException;
+import br.com.pb.barbershop.msuser.framework.exception.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 import br.com.pb.barbershop.msuser.domain.dto.PageableDTO;
@@ -15,8 +17,6 @@ import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
-
-
 @Service
 @AllArgsConstructor
 public class UserUseCase implements UserService {
@@ -53,13 +53,25 @@ public class UserUseCase implements UserService {
     }
     @Override
     public PageableDTO findAll(String name, Pageable pageable) {
-        Page<User> page = name==null?
-                repository.findAll(pageable):repository.findByName(name, pageable);
+        Page<User> page = name == null ?
+                repository.findAll(pageable) : repository.findByName(name, pageable);
         List<User> users = page.getContent();
-        List<UserDTO> usersDTO = mapper.map(users, new TypeToken<List<UserDTO>>(){}.getType());
+        List<UserDTO> usersDTO = mapper.map(users, new TypeToken<List<UserDTO>>() {
+        }.getType());
         return PageableDTO.builder().numberOfElements(page.getNumberOfElements())
                 .totalElements(page.getTotalElements())
                 .totalPages(page.getTotalPages()).usersDTO(usersDTO).build();
+
+    }
+    @Override
+    public UserDTO findById(Long id){
+        return mapper.map(getUser(id), UserDTO.class );
+    }
+
+    public User getUser(Long id){
+        Optional<User> user = repository.findById(id);
+        return user.orElseThrow(() -> new ObjectNotFoundException("usuário não encontrado!"));
+
     }
 }
 

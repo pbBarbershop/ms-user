@@ -13,18 +13,13 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-
     private String name;
-
     @Column(unique = true)
     private String email;
-
     private String phone;
-
     private String document;
 
     public User(@NonNull Long id, @NonNull String name, @NonNull String email, @NonNull String phone, @NonNull String document) {
