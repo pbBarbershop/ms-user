@@ -27,8 +27,11 @@ public class UserDTO {
     @Pattern(regexp = "^([0-9])+$", message =
             "Deve conter apenas números, ddd + número (11 caracteres ex. 11111111111)")
     private String phone;
-
     private String document;
-}
+    private String password;
+    @NotBlank
+    @Pattern(regexp = "^(?i)(Manager|Customer|Employee)$")
+    private String profileName;
 
+}
 
