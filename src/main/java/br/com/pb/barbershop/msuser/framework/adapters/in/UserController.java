@@ -1,5 +1,4 @@
 package br.com.pb.barbershop.msuser.framework.adapters.in;
-
 import br.com.pb.barbershop.msuser.application.service.UserService;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import br.com.pb.barbershop.msuser.domain.model.User;
@@ -8,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
+import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,9 +31,10 @@ public class UserController {
 
     }
 
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteUserId (@PathVariable Long id){
+        service.deleteUserId(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
-
-
-
 

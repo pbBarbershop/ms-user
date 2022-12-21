@@ -7,6 +7,7 @@ import br.com.pb.barbershop.msuser.domain.model.User;
 import br.com.pb.barbershop.msuser.framework.exception.DataIntegrityValidationException;
 import jakarta.persistence.NoResultException;
 import org.modelmapper.ModelMapper;
+import br.com.pb.barbershop.msuser.framework.exception.IdNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -32,7 +33,6 @@ public class UserUseCase implements UserService {
     public User update(User user) {
         if(!repository.existsById(user.getId()))
             throw new NoResultException(String.format("User nao encontrado", user.getId()));
-
         return repository.save(user);
     }
 
@@ -42,8 +42,14 @@ public class UserUseCase implements UserService {
             throw new DataIntegrityValidationException("Email ja registrado no sistema");
         }
     }
+
+    private void checkIfIdExists(Long id){
+        repository.findById(id).orElseThrow(() -> new IdNotFoundException(id));
+    }
+
+    public void deleteUserId(Long id){
+        checkIfIdExists(id);
+        repository.deleteById(id);
+    }
 }
-
-
-
 
