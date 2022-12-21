@@ -2,6 +2,7 @@ package br.com.pb.barbershop.msuser.in;
 
 import br.com.pb.barbershop.msuser.application.ports.in.UserUseCase;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
+import br.com.pb.barbershop.msuser.domain.dto.UserResponse;
 import br.com.pb.barbershop.msuser.domain.model.User;
 import br.com.pb.barbershop.msuser.framework.exception.DataIntegrityValidationException;
 import br.com.pb.barbershop.msuser.application.ports.out.UserRepository;
@@ -46,6 +47,7 @@ class UserUseCaseTest {
 
     private User user;
     private UserDTO userDTO;
+    private UserResponse userResponse;
     private Optional<User> optionalUser;
 
     @BeforeEach
@@ -58,10 +60,10 @@ class UserUseCaseTest {
     void whenUpdateThenReturnSucess(){
         when(repository.save(any())).thenReturn(user);
 
-        User response = useCase.update(userDTO);
+        UserResponse response = useCase.update(userDTO, 1l);
 
         assertNotNull(response);
-        Assertions.assertEquals(User.class, response.getClass());
+        Assertions.assertEquals(UserResponse.class, response.getClass());
         Assertions.assertEquals(ID, response.getId());
         Assertions.assertEquals(NAME, response.getName());
         Assertions.assertEquals(EMAIL, response.getEmail());
@@ -77,7 +79,7 @@ class UserUseCaseTest {
 
         try {
             optionalUser.get().setId(2L);
-            useCase.update(userDTO);
+            useCase.update(userDTO, 2L);
         } catch (Exception ex) {
             assertEquals(DataIntegrityValidationException.class, ex.getClass());
             assertEquals("Email already registered in the system", ex.getMessage());
@@ -89,6 +91,7 @@ class UserUseCaseTest {
 
         user = new User();
         userDTO = new UserDTO();
+        userResponse = new UserResponse();
         optionalUser = Optional.of(new User());
         }
     }

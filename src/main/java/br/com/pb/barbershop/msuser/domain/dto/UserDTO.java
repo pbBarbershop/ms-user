@@ -34,4 +34,9 @@ public class UserDTO {
 
     private String document;
 
+    private String password;
+
+    @Pattern(regexp = "^(?i)(Manager|Customer|Employee)$")
+    private String profileName;
+
 }

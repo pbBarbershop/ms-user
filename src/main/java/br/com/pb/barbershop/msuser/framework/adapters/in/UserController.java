@@ -2,9 +2,11 @@ package br.com.pb.barbershop.msuser.framework.adapters.in;
 
 import br.com.pb.barbershop.msuser.application.service.UserService;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
+import br.com.pb.barbershop.msuser.domain.dto.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -20,16 +22,13 @@ public class UserController {
     private final UserService service;
 
     @PostMapping
-    public ResponseEntity<UserDTO> create(@RequestBody @Valid UserDTO obj) {
-        return ResponseEntity.created(ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}").buildAndExpand(service.create(obj).getId()).toUri()).build();
-
+    public ResponseEntity<UserResponse> create(@RequestBody @Valid UserDTO obj) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(obj));
     }
 
     @PutMapping(value = ID)
-    public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody @Valid UserDTO obj) {
-        obj.setId(id);
-        return ResponseEntity.ok().body(mapper.map(service.update(obj), UserDTO.class));
+    public ResponseEntity<UserResponse> update(@PathVariable Long id, @RequestBody @Valid UserDTO obj) {
+        return ResponseEntity.ok().body(service.update(obj, id));
     }
 
 

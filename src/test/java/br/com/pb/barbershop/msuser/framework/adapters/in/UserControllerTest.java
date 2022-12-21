@@ -2,6 +2,8 @@ package br.com.pb.barbershop.msuser.framework.adapters.in;
 
 import br.com.pb.barbershop.msuser.application.ports.in.UserUseCase;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
+import br.com.pb.barbershop.msuser.domain.dto.UserResponse;
+import br.com.pb.barbershop.msuser.domain.model.Profile;
 import br.com.pb.barbershop.msuser.domain.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -27,8 +32,12 @@ class UserControllerTest {
     private static final String EMAIL    = "michel@mail.com";
     private static final String PHONE    = "123";
     private static final String DOCUMENT = "12345";
+    private static final String PASSWORD = "12345";
+    private static final String profileName = "Manager";
     private User user = new User();
+    private UserResponse userResponse;
     private UserDTO userDTO = new UserDTO();
+    List profile = new ArrayList();
     @InjectMocks
     private UserController controller;
     @Mock
@@ -44,9 +53,9 @@ class UserControllerTest {
 
     @Test
     void whenCreateThenReturnCreated() {
-        when(useCase.create(any())).thenReturn(user);
+        when(useCase.create(any())).thenReturn(userResponse);
 
-        ResponseEntity<UserDTO> response = controller.create(userDTO);
+        ResponseEntity<UserResponse> response = controller.create(userDTO);
 
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -55,10 +64,10 @@ class UserControllerTest {
 
     @Test
     void whenUpdateThenReturnSucess() {
-        when(useCase.update(userDTO)).thenReturn(user);
-        when(mapper.map(any(), any())).thenReturn(userDTO);
+        when(useCase.update(userDTO, ID)).thenReturn(userResponse);
+        when(mapper.map(any(), any())).thenReturn(userResponse);
 
-        ResponseEntity<UserDTO> response = controller.update(ID, userDTO);
+        ResponseEntity<UserResponse> response = controller.update(ID, userDTO);
 
         assertNotNull(response);
         assertNotNull(response.getBody());
@@ -74,8 +83,8 @@ class UserControllerTest {
 
     }
     private void startUser() {
-
-        user = new User(ID,NAME,EMAIL,PHONE,DOCUMENT);
-        userDTO = new UserDTO(ID,NAME,EMAIL,PHONE,DOCUMENT);
+        List profile = new ArrayList();
+        user = new User(ID,NAME,EMAIL,PHONE,DOCUMENT,PASSWORD,profile);
+        userDTO = new UserDTO(ID,NAME,EMAIL,PHONE,DOCUMENT, PASSWORD, profileName);
     }
 }

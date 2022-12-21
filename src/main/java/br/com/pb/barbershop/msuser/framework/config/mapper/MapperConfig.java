@@ -1,4 +1,4 @@
-package br.com.pb.barbershop.msuser.framework.mapper;
+package br.com.pb.barbershop.msuser.framework.config.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -10,4 +10,6 @@ public class MapperConfig {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
+
 }
