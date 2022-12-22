@@ -2,6 +2,7 @@ package br.com.pb.barbershop.msuser.application.ports.in;
 import br.com.pb.barbershop.msuser.application.ports.out.UserRepository;
 import br.com.pb.barbershop.msuser.application.service.UserService;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
+import br.com.pb.barbershop.msuser.domain.dto.UserResponseGetAll;
 import br.com.pb.barbershop.msuser.domain.model.User;
 import br.com.pb.barbershop.msuser.framework.exception.DataIntegrityValidationException;
 import jakarta.persistence.NoResultException;
@@ -96,11 +97,11 @@ public class UserUseCase implements UserService {
         Page<User> page = name == null ?
                 repository.findAll(pageable) : repository.findByName(name, pageable);
         List<User> users = page.getContent();
-        List<UserDTO> usersDTO = mapper.map(users, new TypeToken<List<UserDTO>>() {
+        List<UserResponseGetAll> usersResponse = mapper.map(users, new TypeToken<List<UserResponseGetAll>>() {
         }.getType());
         return PageableDTO.builder().numberOfElements(page.getNumberOfElements())
                 .totalElements(page.getTotalElements())
-                .totalPages(page.getTotalPages()).usersDTO(usersDTO).build();
+                .totalPages(page.getTotalPages()).usersResponse(usersResponse).build();
 
     }
     @Override

@@ -19,5 +19,5 @@ public class PageableDTO {
 
     private Integer totalPages;
 
-    private List<UserDTO> usersDTO;
+    private List<UserResponseGetAll> usersResponse;
 }
