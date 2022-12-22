@@ -104,13 +104,16 @@ public class UserUseCase implements UserService {
 
     }
     @Override
-    public UserDTO findById(Long id){
-        return mapper.map(getUser(id), UserDTO.class );
+    public UserResponse findById(Long id){
+        var user = getUser(id);
+        var response  = mapper.map(user, UserResponse.class);
+        response.setProfileName(user.getProfile().get(0).getNome());
+        return response;
     }
 
     public User getUser(Long id){
         Optional<User> user = repository.findById(id);
-        return user.orElseThrow(() -> new ObjectNotFoundException("usuário não encontrado!"));
+        return user.orElseThrow(() -> new IdNotFoundException(id));
 
     }
 }

@@ -8,7 +8,7 @@ import br.com.pb.barbershop.msuser.domain.dto.UserResponse;
 
 public interface UserService {
 
-    UserDTO findById(Long id);
+    UserResponse findById(Long id);
 
     void deleteUserId(Long id);
 

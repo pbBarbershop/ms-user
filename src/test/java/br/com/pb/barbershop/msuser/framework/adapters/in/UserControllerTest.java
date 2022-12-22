@@ -97,8 +97,8 @@ class UserControllerTest {
 
     @Test
     void findByIdTest() throws Exception {
-        UserDTO userDTO = new UserDTO();
-        when(useCase.findById(any())).thenReturn(userDTO);
+        userResponse = new UserResponse();
+        when(useCase.findById(any())).thenReturn(userResponse);
         mockMvc.perform(MockMvcRequestBuilders.get(URL_ID)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200));
