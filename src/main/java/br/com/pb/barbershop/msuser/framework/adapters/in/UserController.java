@@ -1,5 +1,5 @@
 package br.com.pb.barbershop.msuser.framework.adapters.in;
-import br.com.pb.barbershop.msuser.application.service.UserService;
+import br.com.pb.barbershop.msuser.application.ports.in.UserService;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(obj));
     }
 
-    @PutMapping()
+    @PutMapping("/{id}")
     public ResponseEntity<UserResponse> update(@PathVariable Long id, @RequestBody @Valid UserDTO obj) {
         return ResponseEntity.ok().body(service.update(obj, id));
     }

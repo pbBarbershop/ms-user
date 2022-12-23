@@ -1,9 +1,10 @@
 package br.com.pb.barbershop.msuser.application.in;
 
-import br.com.pb.barbershop.msuser.application.ports.in.UserUseCase;
+import br.com.pb.barbershop.msuser.application.service.UserUseCase;
 import br.com.pb.barbershop.msuser.domain.dto.PageableDTO;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import br.com.pb.barbershop.msuser.domain.dto.UserResponse;
+import br.com.pb.barbershop.msuser.domain.dto.UserResponseGetAll;
 import br.com.pb.barbershop.msuser.domain.model.Profile;
 import br.com.pb.barbershop.msuser.domain.model.User;
 import br.com.pb.barbershop.msuser.framework.exception.DataIntegrityValidationException;
@@ -116,7 +117,7 @@ class UserUseCaseTest {
         assertEquals(expectedPageableParameters.getNumberOfElements(), pageableParameters.getNumberOfElements());
         assertEquals(expectedPageableParameters.getTotalElements(), pageableParameters.getTotalElements());
         assertEquals(expectedPageableParameters.getTotalPages(), pageableParameters.getTotalPages());
-        assertEquals(expectedPageableParameters.getUsersDTO().get(0).getId(), pageableParameters.getUsersDTO().get(0).getId());
+        assertEquals(expectedPageableParameters.getUsersResponse().get(0).getId(), pageableParameters.getUsersResponse().get(0).getId());
     }
 
     private PageableDTO getStateResponseParameters() {
@@ -124,7 +125,7 @@ class UserUseCaseTest {
                 .numberOfElements(1)
                 .totalElements(1L)
                 .totalPages(1)
-                .usersDTO(List.of(new UserDTO()))
+                .usersResponse(List.of(new UserResponseGetAll()))
                 .build();
     }
 

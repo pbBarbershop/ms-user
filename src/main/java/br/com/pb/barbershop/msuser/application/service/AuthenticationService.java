@@ -1,4 +1,4 @@
-package br.com.pb.barbershop.msuser.application.ports.in;
+package br.com.pb.barbershop.msuser.application.service;
 
 import br.com.pb.barbershop.msuser.application.ports.out.UserRepository;
 import lombok.RequiredArgsConstructor;

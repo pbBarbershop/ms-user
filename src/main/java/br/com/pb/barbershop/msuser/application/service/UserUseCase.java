@@ -1,14 +1,12 @@
-package br.com.pb.barbershop.msuser.application.ports.in;
+package br.com.pb.barbershop.msuser.application.service;
+import br.com.pb.barbershop.msuser.application.ports.in.UserService;
 import br.com.pb.barbershop.msuser.application.ports.out.UserRepository;
-import br.com.pb.barbershop.msuser.application.service.UserService;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import br.com.pb.barbershop.msuser.domain.dto.UserResponseGetAll;
 import br.com.pb.barbershop.msuser.domain.model.User;
 import br.com.pb.barbershop.msuser.framework.exception.DataIntegrityValidationException;
-import jakarta.persistence.NoResultException;
 import org.modelmapper.ModelMapper;
 import br.com.pb.barbershop.msuser.framework.exception.IdNotFoundException;
-import br.com.pb.barbershop.msuser.framework.exception.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 import br.com.pb.barbershop.msuser.domain.dto.PageableDTO;
@@ -23,9 +21,6 @@ import br.com.pb.barbershop.msuser.domain.model.Profile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class UserUseCase implements UserService {
@@ -36,44 +31,43 @@ public class UserUseCase implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserResponse create(UserDTO obj) {
-        findByEmail(obj);
+    public UserResponse create(UserDTO userDTO) {
+        findByEmail(userDTO);
+        verifyIfDocumentExists(userDTO);
         var user = new User();
-        user.setName(obj.getName());
-        user.setPhone(obj.getPhone());
-        user.setEmail(obj.getEmail());
-        user.setDocument(obj.getDocument());
-        user.setPassword(passwordEncoder.encode(obj.getPassword()));
-        String profileName = "ROLE_"+obj.getProfileName().toUpperCase();
-        Optional<Profile> profile = profileRepository.findByNome(profileName);
+        user.setName(userDTO.getName());
+        user.setPhone(userDTO.getPhone());
+        user.setEmail(userDTO.getEmail());
+        user.setDocument(userDTO.getDocument());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        String profileName = "ROLE_"+userDTO.getProfileName().toUpperCase();
+        Optional<Profile> profile = profileRepository.findByName(profileName);
         user.addProfile(profile.get());
         repository.save(user);
         var response = mapper.map(user, UserResponse.class);
-        response.setProfileName(obj.getProfileName());
+        response.setProfileName(userDTO.getProfileName());
         return response;
     }
     @Override
-    public UserResponse update(UserDTO obj, Long id) {
-        obj.setId(id);
-        findByEmail(obj);
-        var userOp = repository.findById(id);
-        if(!userOp.isPresent()){
-            throw new ObjectNotFoundException("usuário não encontrado");
-        }
-        var user = userOp.get();
-        user.setName(obj.getName());
-        user.setPhone(obj.getPhone());
-        user.setEmail(obj.getEmail());
-        user.setDocument(obj.getDocument());
-        user.setPassword(passwordEncoder.encode(obj.getPassword()));
-        String profileName = "ROLE_"+obj.getProfileName().toUpperCase();
+    public UserResponse update(UserDTO userDTO, Long id) {
+        checkIfIdExists(id);
+        userDTO.setId(id);
+        verifyIfDocumentExists(userDTO);
+        findByEmail(userDTO);
+        var user = repository.findById(id).get();
+        user.setName(userDTO.getName());
+        user.setPhone(userDTO.getPhone());
+        user.setEmail(userDTO.getEmail());
+        user.setDocument(userDTO.getDocument());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        String profileName = "ROLE_"+userDTO.getProfileName().toUpperCase();
         Profile profileToRemove = user.getProfile().get(0);
         user.removeProfile(profileToRemove);
-        Profile profile = profileRepository.findByNome(profileName).get();
+        Profile profile = profileRepository.findByName(profileName).get();
         user.addProfile(profile);
         repository.save(user);
         var response = mapper.map(user, UserResponse.class);
-        response.setProfileName(obj.getProfileName());
+        response.setProfileName(userDTO.getProfileName());
         return response;
     }
 
@@ -86,6 +80,13 @@ public class UserUseCase implements UserService {
 
     private void checkIfIdExists(Long id){
         repository.findById(id).orElseThrow(() -> new IdNotFoundException(id));
+    }
+
+    private void verifyIfDocumentExists(UserDTO userDTO){
+        Optional<User> user = repository.findByDocument(userDTO.getDocument());
+        if (user.isPresent() && !user.get().getId().equals(userDTO.getId())){
+            throw new DataIntegrityValidationException("Documento já cadastrado no sistema!");
+        }
     }
     @Override
     public void deleteUserId(Long id) {
@@ -108,7 +109,7 @@ public class UserUseCase implements UserService {
     public UserResponse findById(Long id){
         var user = getUser(id);
         var response  = mapper.map(user, UserResponse.class);
-        response.setProfileName(user.getProfile().get(0).getNome());
+        response.setProfileName(user.getProfile().get(0).getName());
         return response;
     }
 

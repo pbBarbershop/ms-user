@@ -1,4 +1,4 @@
-package br.com.pb.barbershop.msuser.application.service;
+package br.com.pb.barbershop.msuser.application.ports.in;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import br.com.pb.barbershop.msuser.domain.dto.PageableDTO;
 import org.springframework.data.domain.Pageable;
