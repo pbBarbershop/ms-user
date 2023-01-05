@@ -1,4 +1,4 @@
-package br.com.pb.barbershop.msuser.application.ports.out;
+package br.com.pb.barbershop.msuser.framework.adapters.out.repository;
 
 
 import br.com.pb.barbershop.msuser.domain.model.Profile;

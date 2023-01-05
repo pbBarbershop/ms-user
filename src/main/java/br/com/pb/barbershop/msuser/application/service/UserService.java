@@ -1,14 +1,14 @@
 package br.com.pb.barbershop.msuser.application.service;
 
 import br.com.pb.barbershop.msuser.application.ports.in.UserUseCase;
-import br.com.pb.barbershop.msuser.application.ports.out.ProfileRepository;
-import br.com.pb.barbershop.msuser.application.ports.out.UserRepository;
+import br.com.pb.barbershop.msuser.framework.adapters.out.repository.ProfileRepository;
 import br.com.pb.barbershop.msuser.domain.dto.PageableDTO;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import br.com.pb.barbershop.msuser.domain.dto.UserResponse;
 import br.com.pb.barbershop.msuser.domain.dto.UserResponseGetAll;
 import br.com.pb.barbershop.msuser.domain.model.Profile;
 import br.com.pb.barbershop.msuser.domain.model.User;
+import br.com.pb.barbershop.msuser.framework.adapters.out.repository.UserJpaRepository;
 import br.com.pb.barbershop.msuser.framework.exception.GenericException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -26,7 +26,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService implements UserUseCase {
     private final ModelMapper mapper;
-    private final UserRepository repository;
+    private final UserJpaRepository repository;
     private final ProfileRepository profileRepository;
 
     private final PasswordEncoder passwordEncoder;

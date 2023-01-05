@@ -1,6 +1,6 @@
 package br.com.pb.barbershop.msuser.framework.config.security;
 
-import br.com.pb.barbershop.msuser.application.ports.out.UserRepository;
+import br.com.pb.barbershop.msuser.framework.adapters.out.repository.UserJpaRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ import java.io.IOException;
 public class SecurityFilter  extends OncePerRequestFilter {
 
     private final TokenService tokenService;
-    private final UserRepository userRepository;
+    private final UserJpaRepository userRepository;
 
     private final ModelMapper mapper;
 

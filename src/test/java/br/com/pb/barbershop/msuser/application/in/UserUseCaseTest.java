@@ -7,7 +7,6 @@ import br.com.pb.barbershop.msuser.domain.dto.UserResponse;
 import br.com.pb.barbershop.msuser.domain.dto.UserResponseGetAll;
 import br.com.pb.barbershop.msuser.domain.model.Profile;
 import br.com.pb.barbershop.msuser.domain.model.User;
-import br.com.pb.barbershop.msuser.application.ports.out.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

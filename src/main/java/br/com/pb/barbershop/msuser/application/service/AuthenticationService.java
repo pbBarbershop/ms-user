@@ -1,6 +1,6 @@
 package br.com.pb.barbershop.msuser.application.service;
 
-import br.com.pb.barbershop.msuser.application.ports.out.UserRepository;
+import br.com.pb.barbershop.msuser.framework.adapters.out.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService implements UserDetailsService {
-    private final UserRepository userRepository;
+    private final UserJpaRepository userRepository;
     private final ModelMapper modelMapper;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
