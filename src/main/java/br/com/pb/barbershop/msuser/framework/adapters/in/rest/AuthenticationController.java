@@ -1,4 +1,4 @@
-package br.com.pb.barbershop.msuser.framework.adapters.in;
+package br.com.pb.barbershop.msuser.framework.adapters.in.rest;
 
 import br.com.pb.barbershop.msuser.domain.dto.LoginDTO;
 import br.com.pb.barbershop.msuser.domain.dto.TokenJwtResponseDTO;

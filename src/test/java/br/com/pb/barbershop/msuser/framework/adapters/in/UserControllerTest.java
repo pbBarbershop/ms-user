@@ -5,6 +5,7 @@ import br.com.pb.barbershop.msuser.domain.dto.PageableDTO;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import br.com.pb.barbershop.msuser.domain.dto.UserResponse;
 import br.com.pb.barbershop.msuser.domain.model.User;
+import br.com.pb.barbershop.msuser.framework.adapters.in.rest.UserController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

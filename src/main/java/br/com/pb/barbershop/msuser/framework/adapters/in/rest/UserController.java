@@ -1,4 +1,4 @@
-package br.com.pb.barbershop.msuser.framework.adapters.in;
+package br.com.pb.barbershop.msuser.framework.adapters.in.rest;
 import br.com.pb.barbershop.msuser.application.ports.in.UserUseCase;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import jakarta.validation.Valid;
