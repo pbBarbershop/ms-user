@@ -1,13 +1,12 @@
 package br.com.pb.barbershop.msuser.application.in;
 
-import br.com.pb.barbershop.msuser.application.service.UserUseCase;
+import br.com.pb.barbershop.msuser.application.service.UserService;
 import br.com.pb.barbershop.msuser.domain.dto.PageableDTO;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import br.com.pb.barbershop.msuser.domain.dto.UserResponse;
 import br.com.pb.barbershop.msuser.domain.dto.UserResponseGetAll;
 import br.com.pb.barbershop.msuser.domain.model.Profile;
 import br.com.pb.barbershop.msuser.domain.model.User;
-import br.com.pb.barbershop.msuser.framework.exception.DataIntegrityValidationException;
 import br.com.pb.barbershop.msuser.application.ports.out.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +42,7 @@ class UserUseCaseTest {
 
 
     @InjectMocks
-    private UserUseCase useCase;
+    private UserService useCase;
 
     @Mock
     private UserRepository repository;

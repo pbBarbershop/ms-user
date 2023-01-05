@@ -1,12 +1,13 @@
 package br.com.pb.barbershop.msuser.framework.config.security;
 
 import br.com.pb.barbershop.msuser.domain.model.User;
+import br.com.pb.barbershop.msuser.framework.exception.GenericException;
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -38,8 +39,9 @@ public class TokenService {
                     .build()
                     .verify(tokenJwt)
                     .getSubject();
+
         }catch(JWTVerificationException exception){
-            throw new RuntimeException("Token inválido");
+            throw new GenericException(HttpStatus.UNAUTHORIZED, "Token inválido");
         }
     }
 

@@ -1,9 +1,10 @@
 package br.com.pb.barbershop.msuser.framework.adapters.in;
-import br.com.pb.barbershop.msuser.application.ports.in.UserService;
+import br.com.pb.barbershop.msuser.application.ports.in.UserUseCase;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,9 @@ import br.com.pb.barbershop.msuser.domain.dto.UserResponse;
 @RequestMapping("/user")
 public class UserController {
     private final ModelMapper mapper;
-    private final UserService service;
+    private final UserUseCase service;
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponse> create(@RequestBody @Valid UserDTO obj) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(obj));
     }

@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 import br.com.pb.barbershop.msuser.domain.dto.UserResponse;
 
-public interface UserService {
+public interface UserUseCase {
 
     UserResponse findById(Long id);
 

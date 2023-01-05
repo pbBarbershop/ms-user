@@ -1,6 +1,6 @@
 
 package br.com.pb.barbershop.msuser.framework.adapters.in;
-import br.com.pb.barbershop.msuser.application.service.UserUseCase;
+import br.com.pb.barbershop.msuser.application.service.UserService;
 import br.com.pb.barbershop.msuser.domain.dto.PageableDTO;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import br.com.pb.barbershop.msuser.domain.dto.UserResponse;
@@ -51,7 +51,7 @@ class UserControllerTest {
     @InjectMocks
     private UserController controller;
     @Mock
-    private UserUseCase useCase;
+    private UserService useCase;
     @Autowired
     private ModelMapper mapper;
     @Autowired

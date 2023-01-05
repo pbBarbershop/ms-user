@@ -1,6 +1,5 @@
 package br.com.pb.barbershop.msuser.domain.dto;
 
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -18,7 +17,7 @@ public class UserDTO {
     private Long id;
     @NotBlank
     @Pattern(regexp = "^([a-zA-ZãÃéÉíÍóÓêÊôÔáÁ\s])+$", message =
-            "Nome deve conter apenas letras e não deve ser em branco.")
+            "O campo nome deve possuir apenas letras e não pode estar em branco!")
     private String name;
     @Email
     private String email;
@@ -28,8 +27,8 @@ public class UserDTO {
     @Pattern(regexp = "^([0-9])+$", message =
             "Deve conter apenas números, ddd + número (11 caracteres ex. 11111111111)")
     private String phone;
-    @Pattern(regexp = "^([0-9])+$", message = "Digite apenas números!")
-    private String document;
+
+    private String description;
     @Length(min = 8, message = "Sua senha deve ter no minimo 8 digitos!")
     @NotBlank
     private String password;

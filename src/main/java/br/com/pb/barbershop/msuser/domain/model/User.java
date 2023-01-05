@@ -26,7 +26,7 @@ public class User implements UserDetails {
     @Email
     private String email;
     private String phone;
-    private String document;
+    private String description;
     private String password;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Profile> profile = new ArrayList<>();
