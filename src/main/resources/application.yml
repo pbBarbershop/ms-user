@@ -9,7 +9,7 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/ms_user?createDatabaseIfNotExist=true&serverTimezone=UTC
     username: root
-    password: 99168844Jo#
+    password: root
   jpa:
     hibernate:
       ddl-auto: update
@@ -18,9 +18,13 @@ spring:
 springdoc:
   api-docs:
     path: /api-docs
+    version: openapi_3_0
   swagger-ui:
-    operations-sorter: method
     path: /swagger-ui.html
+    csrf:
+      enabled: false
+  show-actuator: true
+  default-produces-media-type: "application/json"
 
 
   main:
