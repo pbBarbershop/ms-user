@@ -1,9 +1,11 @@
 package br.com.pb.barbershop.msuser.domain.dto;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserResponse {
     private Long id;
     private String name;

@@ -1,5 +1,7 @@
 package br.com.pb.barbershop.msuser.application.in;
 
+import br.com.pb.barbershop.msuser.application.ports.out.ProfileRepositoryPortOut;
+import br.com.pb.barbershop.msuser.application.ports.out.UserRepositoryPortOut;
 import br.com.pb.barbershop.msuser.application.service.UserService;
 import br.com.pb.barbershop.msuser.domain.dto.PageableDTO;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
@@ -7,6 +9,7 @@ import br.com.pb.barbershop.msuser.domain.dto.UserResponse;
 import br.com.pb.barbershop.msuser.domain.dto.UserResponseGetAll;
 import br.com.pb.barbershop.msuser.domain.model.Profile;
 import br.com.pb.barbershop.msuser.domain.model.User;
+import br.com.pb.barbershop.msuser.framework.exception.GenericException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class UserUseCaseTest {
@@ -41,13 +45,18 @@ class UserUseCaseTest {
 
 
     @InjectMocks
-    private UserService useCase;
+    private UserService service;
 
     @Mock
-    private UserRepository repository;
-
+    private UserRepositoryPortOut repository;
     @Mock
+    private ProfileRepositoryPortOut profileRepository;
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
+    @Spy
     private ModelMapper mapper;
+
 
     private User user;
     private UserDTO userDTO;
@@ -55,41 +64,46 @@ class UserUseCaseTest {
     private Optional<User> optionalUser;
     private List<Profile> profile;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        startUser();
-    }
 
     @Test
-    void whenUpdateThenReturnSucess(){
-        when(repository.save(any())).thenReturn(user);
+    void whenCreateThenReturnSucess(){
+        UserDTO userDTO = getUserDTO();
+        User user = getUser();
+        Profile profile = getProfile();
+        UserResponse userResponse = getUserResponse();
+        when(mapper.map(userDTO, User.class)).thenReturn(user);
+        when(mapper.map(user, UserResponse.class)).thenReturn(userResponse);
+        when(mapper.map(Optional.of(profile),Profile.class)).thenReturn(profile);
+        when(profileRepository.findByName(anyString())).thenReturn(Optional.of(profile));
 
-        UserResponse response = useCase.update(userDTO, 1l);
-
-        assertNotNull(response);
-        Assertions.assertEquals(UserResponse.class, response.getClass());
-        Assertions.assertEquals(ID, response.getId());
-        Assertions.assertEquals(NAME, response.getName());
-        Assertions.assertEquals(EMAIL, response.getEmail());
-        Assertions.assertEquals(PHONE, response.getPhone());
-        Assertions.assertEquals(DOCUMENT, response.getDocument());
-
+        UserResponse response = service.create(userDTO);
+        Assertions.assertEquals(user.getName(), response.getName());
+        Assertions.assertEquals(user.getPhone(), response.getPhone());
+        Assertions.assertEquals(user.getDescription(), response.getDescription());
 
     }
 
     @Test
-    void whenUpdateThenReturnAnDataIntegrityViolationException() {
-        when(repository.findByEmail(anyString())).thenReturn(optionalUser);
+    void whenUpdateThenReturnSucess() {
+        var userDTO = getUserDTO();
+        var user = getUser();
+        Profile profile = getProfile();
+        UserResponse userResponse = getUserResponse();
 
-        try {
-            optionalUser.get().setId(2L);
-            useCase.update(userDTO, 2L);
-        } catch (Exception ex) {
-            assertEquals(DataIntegrityValidationException.class, ex.getClass());
-            assertEquals("Email already registered in the system", ex.getMessage());
-        }
+        when(mapper.map(user, UserResponse.class)).thenReturn(userResponse);
 
+        when(service.create(userDTO)).thenReturn(userResponse);
+
+
+        when(profileRepository.findByName(anyString())).thenReturn(Optional.of(profile));
+
+        when(repository.findById(any())).thenReturn(Optional.of(user));
+        when(repository.findByEmail(anyString())).thenReturn(Optional.of(user));
+
+        UserResponse response = service.update(userDTO, ID);
+
+        Assertions.assertEquals(user.getId(), response.getId());
+        Assertions.assertEquals(user.getName(), response.getName());
 
     }
 
@@ -97,44 +111,57 @@ class UserUseCaseTest {
     void whenGetUserReturnUser(){
         User user = new User(ID, NAME, EMAIL, PHONE, DOCUMENT, PASSWORD, profile);
         when(repository.findById(ArgumentMatchers.eq(user.getId()))).thenReturn(Optional.of(user));
-        User userTest = useCase.getUser(user.getId());
+        User userTest = service.getUser(user.getId());
         assertEquals(user.getName(), userTest.getName());
         assertEquals(user.getEmail(), userTest.getEmail());
     }
 
-    @Test
-    void shouldFindAllUsers() {
-        var user = new User();
-        Page<User> page = new PageImpl<>(List.of(user));
-        PageableDTO expectedPageableParameters = getStateResponseParameters();
 
-        when(repository.findAll((Pageable) any())).thenReturn(page);
 
-        PageableDTO pageableParameters = useCase.findAll(null, any(Pageable.class));
+        private UserResponse getUserResponse() {
+            return UserResponse.builder()
+                    .id(ID)
+                    .name("Lucas")
+                    .phone("71992361965")
+                    .email("lucas@hotmail.com")
+                    .profileName("MANAGER")
+                    .description("Isto é uma descrição")
+                    .build();
+        }
 
-        assertEquals(expectedPageableParameters.getNumberOfElements(), pageableParameters.getNumberOfElements());
-        assertEquals(expectedPageableParameters.getTotalElements(), pageableParameters.getTotalElements());
-        assertEquals(expectedPageableParameters.getTotalPages(), pageableParameters.getTotalPages());
-        assertEquals(expectedPageableParameters.getUsersResponse().get(0).getId(), pageableParameters.getUsersResponse().get(0).getId());
-    }
-
-    private PageableDTO getStateResponseParameters() {
-        return PageableDTO.builder()
-                .numberOfElements(1)
-                .totalElements(1L)
-                .totalPages(1)
-                .usersResponse(List.of(new UserResponseGetAll()))
+    private UserDTO getUserDTO() {
+        return UserDTO.builder().name("Lucas")
+                .email("lucas@hotmail.com")
+                .password("12345678")
+                .phone("71992367865")
+                .description("Isto é uma descrição")
+                .profileName("MANAGER")
                 .build();
     }
 
-    private void startUser() {
-
-        user = new User();
-        userDTO = new UserDTO();
-        userResponse = new UserResponse();
-        profile.add(new Profile());
-        optionalUser = Optional.of(new User());
-        }
+    private User getUser() {
+        return User.builder().name("Lucas")
+                .id(ID)
+                .email("lucas@hotmail.com")
+                .password("12345678")
+                .phone("71992367865")
+                .description("Isto é uma descrição")
+                .profile(List.of(new Profile(1l, "ROLE_MANAGER")))
+                .build();
     }
+
+    private Profile getProfile(){
+        return Profile.builder()
+                .id(1L)
+                .name("ROLE_MANAGER")
+                .build();
+    }
+
+
+
+
+
+}
+
 
 

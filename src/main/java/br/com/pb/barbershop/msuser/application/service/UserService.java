@@ -45,8 +45,8 @@ public class UserService implements UserUseCase {
 
         String profileName = "ROLE_"+userDTO.getProfileName().toUpperCase();
         Optional<Profile> profile = profileRepository.findByName(profileName);
-        user.addProfile(profile.get());
-
+        Profile profileSave = mapper.map(profile, Profile.class);
+        user.addProfile(profileSave);
         repository.save(user);
 
         var response = mapper.map(user, UserResponse.class);
@@ -56,11 +56,12 @@ public class UserService implements UserUseCase {
     }
     @Override
     public UserResponse update(UserDTO userDTO, Long id) {
-        checkIfIdExists(id);
+        User user = repository
+                .findById(id)
+                .orElseThrow(() -> new GenericException(HttpStatus.BAD_REQUEST, "Id não encontrado!"));
+
         userDTO.setId(id);
         findByEmail(userDTO);
-
-        var user = repository.findById(id).get();
 
         user.setName(userDTO.getName());
         user.setPhone(userDTO.getPhone());
@@ -118,8 +119,8 @@ public class UserService implements UserUseCase {
             throw new GenericException(HttpStatus.BAD_REQUEST, "Email em uso!");
         }
     }
-    private void checkIfIdExists(Long id){
-        repository.findById(id).orElseThrow(() -> new GenericException(HttpStatus.BAD_REQUEST, "Usuário não existente"));
+    private User checkIfIdExists(Long id){
+        return repository.findById(id).orElseThrow(() -> new GenericException(HttpStatus.BAD_REQUEST, "Usuário não existente"));
     }
 
 }

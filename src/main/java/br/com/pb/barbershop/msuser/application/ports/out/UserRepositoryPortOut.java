@@ -14,4 +14,5 @@ public interface UserRepositoryPortOut {
     void deleteById(Long id);
     Page<User> findAll(Pageable pageable);
 
+
 }
