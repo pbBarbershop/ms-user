@@ -1,10 +1,9 @@
 package br.com.pb.barbershop.msuser.application.ports.in;
-import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
+
 import br.com.pb.barbershop.msuser.domain.dto.PageableDTO;
-import org.springframework.data.domain.Pageable;
-
-
+import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import br.com.pb.barbershop.msuser.domain.dto.UserResponse;
+import org.springframework.data.domain.Pageable;
 
 public interface UserUseCase {
 

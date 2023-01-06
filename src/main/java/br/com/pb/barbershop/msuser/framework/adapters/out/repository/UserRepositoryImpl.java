@@ -18,7 +18,28 @@ public class UserRepositoryImpl implements UserRepositoryPortOut {
     }
 
     @Override
+    public Optional<User> findById(Long id) {
+        return repository.findById(id);
+    }
+
+    @Override
     public Page<User> findByName(String name, Pageable pageable){
         return repository.findByName(name, pageable);
     }
+
+    @Override
+    public Page<User> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+    @Override
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    public void save(User user) {
+        repository.save(user);
+    }
+
+
 }
