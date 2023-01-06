@@ -27,6 +27,8 @@ public class SecurityConfigurations {
     @Qualifier("customAuthenticationEntryPoint")
     private final AuthenticationEntryPoint authEntryPoint;
     private final AccessDeniedHandler accessDeniedHandler;
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf().disable()
