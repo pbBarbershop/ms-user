@@ -12,34 +12,6 @@
 
 ## Exemplo de cURL
 
-### POST
-
-`/auth/login`
-
-```cURL
-curl --location --request POST 'http://localhost:8081/api/barbershop/auth/login' \
---header 'Content-Type: application/json' \
---header 'Accept: application/json' \
---data-raw '{
-  "email": "aliquip culpa et dolore",
-  "password": "ipsum Ut "
-}'
-```
-
-### POST
-
-`/auth/login`
-
-```cURL
-curl --location --request POST 'http://localhost:8081/api/barbershop/auth/login' \
---header 'Content-Type: application/json' \
---header 'Accept: application/json' \
---data-raw '{
-  "email": "aliquip culpa et dolore",
-  "password": "ipsum Ut "
-}'
-```
-
 ### POST - Autenticar Usuário
 
 `/auth/login`
@@ -73,7 +45,7 @@ curl --location --request POST 'http://localhost:8081/api/barbershop/user' \
 }'
 ```
 
-### GET - Listar Usuário
+### GET - Listar Usuários
 
 `/user?name=culpa proident&page=99257794&size=15104249&sort=["ea aute dolor non","consequat Excepteur"]`
 
@@ -82,3 +54,39 @@ curl --location -g --request GET 'http://localhost:8081/api/barbershop/user?name
 --header 'Accept: application/json'
 ```
 
+### GET - Listar Usuário
+
+`/user/:id`
+
+```cURL
+curl --location --request GET 'http://localhost:8081/api/barbershop/user/-56746167' \
+--header 'Accept: application/json'
+```
+
+### DEL - Excluir Usuário
+
+`/user/:id`
+
+```cURL
+curl --location --request DELETE 'http://localhost:8081/api/barbershop/user/-56746167' \
+--header 'Accept: application/json'
+```
+
+### PUT - Atualizar Usuário
+
+`/user/:id`
+
+```cURL
+curl --location --request PUT 'http://localhost:8081/api/barbershop/user/-56746167' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--data-raw '{
+  "name": "MT rzÊmÔã",
+  "password": "magna ullamco esse Excepteur",
+  "phone": "99204724617",
+  "profileName": "Customer",
+  "id": -81024363,
+  "email": "anim reprehenderit consectetur Lorem sunt",
+  "description": "sed eu proident ad"
+}'
+```
