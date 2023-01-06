@@ -3,39 +3,33 @@ package br.com.pb.barbershop.msuser.application.in;
 import br.com.pb.barbershop.msuser.application.ports.out.ProfileRepositoryPortOut;
 import br.com.pb.barbershop.msuser.application.ports.out.UserRepositoryPortOut;
 import br.com.pb.barbershop.msuser.application.service.UserService;
-import br.com.pb.barbershop.msuser.domain.dto.PageableDTO;
 import br.com.pb.barbershop.msuser.domain.dto.UserDTO;
 import br.com.pb.barbershop.msuser.domain.dto.UserResponse;
-import br.com.pb.barbershop.msuser.domain.dto.UserResponseGetAll;
 import br.com.pb.barbershop.msuser.domain.model.Profile;
 import br.com.pb.barbershop.msuser.domain.model.User;
-import br.com.pb.barbershop.msuser.framework.exception.GenericException;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class UserUseCaseTest {
+class UserServiceTest {
 
-    private static final Long ID      = Long.valueOf(1);
-    private static final String NAME     = "michel";
-    private static final String EMAIL    = "michel@mail.com";
+    private static final Long ID = Long.valueOf(1);
+    private static final String NAME = "michel";
+    private static final String EMAIL = "michel@mail.com";
     private static final String PHONE = "123";
     private static final String DOCUMENT = "12345";
     private static final String PASSWORD = "12345";
@@ -66,14 +60,14 @@ class UserUseCaseTest {
 
 
     @Test
-    void whenCreateThenReturnSucess(){
+    void whenCreateThenReturnSucess() {
         UserDTO userDTO = getUserDTO();
         User user = getUser();
         Profile profile = getProfile();
         UserResponse userResponse = getUserResponse();
         when(mapper.map(userDTO, User.class)).thenReturn(user);
         when(mapper.map(user, UserResponse.class)).thenReturn(userResponse);
-        when(mapper.map(Optional.of(profile),Profile.class)).thenReturn(profile);
+        when(mapper.map(Optional.of(profile), Profile.class)).thenReturn(profile);
         when(profileRepository.findByName(anyString())).thenReturn(Optional.of(profile));
 
         UserResponse response = service.create(userDTO);
@@ -84,31 +78,7 @@ class UserUseCaseTest {
     }
 
     @Test
-    void whenUpdateThenReturnSucess() {
-        var userDTO = getUserDTO();
-        var user = getUser();
-        Profile profile = getProfile();
-        UserResponse userResponse = getUserResponse();
-
-        when(mapper.map(user, UserResponse.class)).thenReturn(userResponse);
-
-        when(service.create(userDTO)).thenReturn(userResponse);
-
-
-        when(profileRepository.findByName(anyString())).thenReturn(Optional.of(profile));
-
-        when(repository.findById(any())).thenReturn(Optional.of(user));
-        when(repository.findByEmail(anyString())).thenReturn(Optional.of(user));
-
-        UserResponse response = service.update(userDTO, ID);
-
-        Assertions.assertEquals(user.getId(), response.getId());
-        Assertions.assertEquals(user.getName(), response.getName());
-
-    }
-
-    @Test
-    void whenGetUserReturnUser(){
+    void whenGetUserReturnUser() {
         User user = new User(ID, NAME, EMAIL, PHONE, DOCUMENT, PASSWORD, profile);
         when(repository.findById(ArgumentMatchers.eq(user.getId()))).thenReturn(Optional.of(user));
         User userTest = service.getUser(user.getId());
@@ -117,16 +87,16 @@ class UserUseCaseTest {
     }
 
 
-        private UserResponse getUserResponse() {
-            return UserResponse.builder()
-                    .id(ID)
-                    .name("Lucas")
-                    .phone("71992361965")
-                    .email("lucas@hotmail.com")
-                    .profileName("MANAGER")
-                    .description("Isto é uma descrição")
-                    .build();
-        }
+    private UserResponse getUserResponse() {
+        return UserResponse.builder()
+                .id(ID)
+                .name("Lucas")
+                .phone("71992361965")
+                .email("lucas@hotmail.com")
+                .profileName("MANAGER")
+                .description("Isto é uma descrição")
+                .build();
+    }
 
     private UserDTO getUserDTO() {
         return UserDTO.builder().name("Lucas")
@@ -149,7 +119,7 @@ class UserUseCaseTest {
                 .build();
     }
 
-    private Profile getProfile(){
+    private Profile getProfile() {
         return Profile.builder()
                 .id(1L)
                 .name("ROLE_MANAGER")

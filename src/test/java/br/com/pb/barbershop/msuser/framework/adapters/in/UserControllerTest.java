@@ -76,8 +76,6 @@ class UserControllerTest {
 
     }
 
-
-
     @Test
     @WithMockUser(roles = "MANAGER")
     void whenUpdateThenReturnSucess() throws Exception {
