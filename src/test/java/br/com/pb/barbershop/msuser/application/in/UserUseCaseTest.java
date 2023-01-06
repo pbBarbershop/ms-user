@@ -117,7 +117,6 @@ class UserUseCaseTest {
     }
 
 
-
         private UserResponse getUserResponse() {
             return UserResponse.builder()
                     .id(ID)
@@ -156,10 +155,6 @@ class UserUseCaseTest {
                 .name("ROLE_MANAGER")
                 .build();
     }
-
-
-
-
 
 }
 
