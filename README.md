@@ -90,3 +90,9 @@ curl --location --request PUT 'http://localhost:8081/api/barbershop/user/-567461
   "description": "sed eu proident ad"
 }'
 ```
+
+### QUERY PARA TESTES:
+  - A Query para inserção do primeiro usuario a fim que se torne possível a testagem dos microserviços encontra-se na pasta resources(src/main/resources).
+  - A senha do primeiro usuário, que está encriptada, é 123456789
+  - Query deve ser executada após inicialiação do microserviço.
+  
